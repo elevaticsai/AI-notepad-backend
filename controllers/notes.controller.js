@@ -74,6 +74,31 @@ export const getNoteDetails = async (req, res) => {
   }
 };
 
+export const deleteNote = async (req, res) => {
+  try {
+    const note = await Note.findOne({
+      _id: req.params.id,
+      userId: req.user._id,
+      isDeleted: false
+    });
+
+    if (!note) {
+      return res.status(404).json({ error: "Note not found" });
+    }
+
+    note.isDeleted = true;
+    await note.save();
+
+    res.json({ message: "Note deleted successfully" });
+  } catch (error) {
+    const errorMessage =
+      process.env.NODE_ENV === "development"
+        ? error.message
+        : "Failed to delete note";
+    res.status(500).json({ error: errorMessage });
+  }
+};
+
 export const updateNote = async (req, res) => {
   try {
     const { id } = req.params;

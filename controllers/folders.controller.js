@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Folder from "../models/Folder.js";
 
 export const createFolder = async (req, res) => {
@@ -42,6 +43,39 @@ export const createFolder = async (req, res) => {
         process.env.NODE_ENV === "development"
           ? error.message
           : "Failed to create folder",
+    });
+  }
+};
+
+export const deleteFolder = async (req, res) => {
+  try {
+    const { folderId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(folderId)) {
+      return res.status(400).json({ error: "Invalid folder ID" });
+    }
+
+    const folder = await Folder.findOne({
+      _id: folderId,
+      userId: req.user._id,
+      isDeleted: false,
+    });
+
+    if (!folder) {
+      return res.status(404).json({ error: "Folder not found or access denied" });
+    }
+
+    // Soft delete the folder
+    folder.isDeleted = true;
+    await folder.save();
+
+    res.status(200).json({ message: "Folder deleted successfully" });
+  } catch (error) {
+    res.status(500).json({
+      error:
+        process.env.NODE_ENV === "development"
+          ? error.message
+          : "Failed to delete folder",
     });
   }
 };
