@@ -21,10 +21,14 @@ export const createNotes = async (req, res) => {
     const note = new Note({
       title: req.body.title,
       content: req.body.content,
+      imgUrl: req.body.imgUrl || null,
       color: req.body.color || "bg-blue-100",
       folderId: req.body.folderId || null,
       tags: req.body.tags || [],
       userId: req.user._id,
+      isArchived: req.body.isArchived || false,
+      isDeleted: false,
+      deletedAt: null
     });
 
     await note.save();
@@ -121,6 +125,7 @@ export const updateNote = async (req, res) => {
     const allowedUpdates = {
       title: req.body.title,
       content: req.body.content,
+      imgUrl: req.body.imgUrl,
       color: req.body.color,
       folderId: req.body.folderId,
       tags: req.body.tags,

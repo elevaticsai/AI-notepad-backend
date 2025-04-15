@@ -15,6 +15,10 @@ const noteSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  imgUrl:{
+    type:String,
+    required:false
+  },
   color: {
     type: String,
     default: 'bg-blue-100'

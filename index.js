@@ -9,6 +9,7 @@ import connectDB from "./config/db.config.js";
 import authRouter from "./routes/auth.route.js";
 import notesRouter from "./routes/notes.route.js";
 import folderRouter from "./routes/folder.route.js";
+import s3Router from "./routes/s3.route.js";
 
 const app = express();
 let PORT = process.env.PORT || 5000;
@@ -28,6 +29,7 @@ app.get("/", async (req, res) => {
   res.send("Welcome to the ai-notes-maker backend");
 });
 
+app.use("/api/v1",s3Router)
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/notes", notesRouter);
 app.use("/api/v1/folders", folderRouter);
