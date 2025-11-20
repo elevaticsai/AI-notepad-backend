@@ -25,11 +25,15 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
+app.get("/health", (req, res) => {
+  res.status(200).send("OK");
+});
+
 app.get("/", async (req, res) => {
   res.send("Welcome to the ai-notes-maker backend");
 });
 
-app.use("/api/v1",s3Router)
+app.use("/api/v1", s3Router);
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/notes", notesRouter);
 app.use("/api/v1/folders", folderRouter);
